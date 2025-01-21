@@ -1,22 +1,22 @@
-<h1 align="center">The Design Repository</h1>
+<h1 align="center">The Design Compendium</h1>
 
 <p align="center">
     <br>
     <img
-        src="../assets/design-repository-emblem.png"
-        alt="design-repository-emblem"
+        src="../assets/design-compendium-emblem.png"
+        alt="design-compendium-emblem"
         width="120px"
     />
     <br>
     <br>
-    <i>A design compendium gathering resources of all types
-        <br> to improve the visual representation of your projects.
+    <i>A repository of resources of all types to improve
+        <br> the visual representation of your projects.
     </i>
     <br>
 </p>
 
 <p align="center">
-    <a href="https://blog.ephemeralrogue.xyz/the-design-repository">
+    <a href="https://blog.ephemeralrogue.xyz/the-design-compendium">
         Project Writeup,
     </a> by
     <a href="https:////github.com/ephemeralrogue">
@@ -33,14 +33,14 @@
 <h2 align="center">Overview</h2>
 
 There are innumerable design resources out there, and almost as many 
-compendiums ennumerating them. The Design Repository will take the classic 
+repositories ennumerating them. The Design Compendium will take the classic 
 README-style resource list and provide a frontend for the quick perusal of 
 resources by category.
 
 This project is currently designed to be forked and utilized on a personal 
 basis, as deployment of the official frontend will not occur until funding 
 makes deployment plausible. you can read about it 
-[here](https://blog.ephemeralrogue.xyz/the-design-repository).
+[here](https://blog.ephemeralrogue.xyz/the-design-compendium).
 
 This is being produced and maintained by 
 [ephemeralrogue](https://github.com/ephemeralrogue) 
@@ -72,7 +72,7 @@ Here is the full stack concept of the project:
 <div>
     <img
         src="../assets/design-repo-concept.JPG"
-        alt="visual design repository concept"
+        alt="visual design compendium concept"
         width="500px"
     />
 </div>
