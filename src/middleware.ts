@@ -9,11 +9,11 @@ const routesLogger = createChildLogger('routes', {
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
 	switch (request.nextUrl.pathname) {
-	case '/api/graphql':
-		routesLogger.info('GraphQL request received');
-		return NextResponse.next();
-	default:
+		case '/api/graphql':
+			routesLogger.info('GraphQL request received');
+			return NextResponse.next();
+		default:
 		// routesLogger.info('Request received');
-		return NextResponse.next();
+			return NextResponse.next();
 	}
 };
