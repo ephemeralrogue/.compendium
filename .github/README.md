@@ -3,7 +3,7 @@
 <p align="center">
     <br>
     <img
-        src="../assets/design-compendium-emblem.png"
+        src="./assets/design-compendium-emblem.png"
         alt="design-compendium-emblem"
         width="120px"
     />
@@ -69,9 +69,9 @@ A Single Page Application (SPA) with client-side rendering of two components:
 <a id="stack"></a>
 <h2 align="center">The Stack</h2>
 Here is the full stack concept of the project:
-<div>
+<div align="center">
     <img
-        src="../assets/design-repo-concept.JPG"
+        src="./assets/design-repo-concept.JPG"
         alt="visual design compendium concept"
         width="500px"
     />
