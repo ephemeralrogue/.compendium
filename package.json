@@ -28,8 +28,8 @@
   "homepage": "https://github.com/LVNACY/design-repository#readme",
   "dependencies": {
     "graphql": "^16.10.0",
-    "graphql-yoga": "^5.10.9",
-    "mongodb": "^6.12.0",
+    "graphql-yoga": "^5.12.2",
+    "mongodb": "^6.14.2",
     "next": "15.1.4",
     "pino": "^9.6.0"
   },
@@ -40,18 +40,21 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "^4.2.0",
     "@types/node": "^22.13.9",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
-    "eslint": "^9",
+    "eslint": "^9.21.0",
     "eslint-config-next": "15.1.4",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^16.0.0",
     "pino-pretty": "^13.0.0",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2"
+  },
+  "overrides": {
+    "uri-js": "pnpm:uri-js-replace"
   },
   "volta": {
     "node": "22.14.0"
