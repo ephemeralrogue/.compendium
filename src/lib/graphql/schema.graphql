@@ -1,0 +1,28 @@
+type Query {
+	tag(name: String!): Tag!
+	resource(name: String!): Resource!
+}
+
+type Tag {
+	name: String!
+	description: String
+	resources: [Resource!]!
+}
+
+type Resource {
+	name: String!
+	description: String
+	URL: String!
+	tags: [Tag!]!
+}
+
+type TagMapper = {
+	tagName: String
+	tagDescription: String
+}
+
+type ResourceMapper = {
+	resName: String
+	resDescription: String
+	resURL: String
+}

@@ -1,10 +1,12 @@
 // Next.js Custom Route Handler: https://nextjs.org/docs/app/building-your-application/routing/router-handlers
 import { createSchema, createYoga } from 'graphql-yoga';
-import { Resource, Tag } from '@/lib/types/resources';
-import MongoDbUtils from '@/lib/MongoDBUtils';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import type { Resource, Tag } from '@/lib/types/resources';
+import MongoDbUtils from '@/lib/database/MongoDBUtils';
 import { Db } from 'mongodb';
-// import schema from '../../schemas/schema.js';
-import createChildLogger from '@/lib/logger';
+import createChildLogger from '@/lib/logger/logger';
 
 const graphQLLogger = createChildLogger('GraphQL');
 
@@ -21,47 +23,69 @@ const tagsColl = db.collection('tags');
 
 const { handleRequest } = createYoga<NextContext>({
 	schema: createSchema({
-		typeDefs: /* GraphQL */ `
-			type Query {
-				getResourcesByTag(tag: String!): [Resource!]!,
-				getTags: [Tag!]!
-			}
-
-			type Tag {
-				name: String!,
-				description: String,
-				resources: [Resource!]!
-			}
-
-			type Resource {
-				name: String!,
-				description: String,
-				URL: String!,
-				tags: [Tag!]!
-			}
-		`,
+		typeDefs: fs.readFileSync(
+			path.join(path.dirname(fileURLToPath(import.meta.url)),
+				'@/lib/graphql/schema.graphql'),
+			'utf-8'),
 		resolvers: {
 			Query: {
 
-				getResourcesByTag: async (parent, args: { tag: string }, context, info): Promise<Tag> => {
-					const { tag } = args;
-					const searchySearch = { name: tag };
-					const Tag = await tagsColl.findOne(searchySearch);
+				tag: async (_, { name }): Promise<Tag> => {
+					const searchySearch = {name: name};
+					const tag = await tagsColl.findOne(searchySearch);
 
-					return Tag.resources;
+					if (!tag) {
+						throw new Error('Tag not found');
+					}
+
+					return {
+						_id: tag._id,
+						name: tag.name,
+						description: tag.description,
+						resources: tag.resources
+					};
 				},
 
-				getTags: (parent, args, context, info): Tag[] => {
-					// mongoDB logic here
-					return [
-						{
-							name: 'Tag Name',
-							description: 'Tag Description',
-							resources: []
-						}
-					];
-				},
+				resource: async (_, { name }): Promise<Resource> => {
+					const searchySearch = {name: name};
+					const resource = await resourcesColl.findOne(searchySearch);
+
+					if (!resource) {
+						throw new Error('Resource not found');
+					}
+
+					return {
+						_id: resource._id,
+						name: resource.name,
+						description: resource.description,
+						URL: resource.URL,
+						tags: resource.tags
+					};
+				}
+			},
+			/*
+			Tag: {
+				name: (parent: Tag, args, context, info) => parent.name,
+				description: (parent: Tag, args, context, info) => parent.description,
+				resources: async (parent: Tag, args, context, info): Promise<Resource[]> => parent.resources
+			},
+
+			Resource: {
+				name: (parent: Resource, args, context, info) => parent.name,
+				description: (parent: Resource, args, context, info) => parent.description,
+				URL: (parent: Resource, args, context, info) => parent.URL,
+				tags: async (parent: Resource, args, context, info): Promise<Tag[]> => {
+					const tagIds = parent.tags.map(tag => tag._id);
+					const queryTags = await tagsColl.find({ _id: { $in: tagIds } }).toArray();
+					return queryTags.map(tag => ({
+						_id: tag._id,
+						name: tag.name,
+						description: tag.description,
+						resources: tag.resources
+					}));
+				}
 			}
+			*/	
 		}
 	}),
  

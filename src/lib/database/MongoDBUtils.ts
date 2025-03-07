@@ -4,7 +4,7 @@ import {
 	MongoClientOptions,
 	ServerApiVersion
 } from 'mongodb';
-import createChildLogger from './logger.js';
+import createChildLogger from './logger/logger.js';
 
 const mongoLogger = createChildLogger('MongoDB');
 
@@ -37,8 +37,8 @@ const MongoDbUtils = {
 
 			mongoLogger.debug(`Connecting to ${database} for first time!`);
 
-			const mongoClient = await MongoClient.connect(mongoDBURIPartial + database, options)
-				/*
+			const mongoClient = await MongoClient.connect(mongoDBURIPartial + database, options);
+			/*
 				.then((client: MongoClient) => {
 					mongoLogger.debug(`Connected to ${database}!`);
 					return client;
