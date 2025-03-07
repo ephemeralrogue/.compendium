@@ -1,4 +1,5 @@
 import {
+	Db,
 	MongoClient,
 	MongoClientOptions,
 	ServerApiVersion
@@ -21,23 +22,29 @@ const options: MongoClientOptions = {
 	}
 };
 
-const mongoClient: MongoClient = new MongoClient(mongoDBURIPartial, options);
+const MongoDbUtils = {
+	state: {
+		dbMap: new Map<string, Db>(),
+		clientMap: new Map<string, MongoClient>(),
+	},
 
-export default async function connect(database: string) {
-	try {
+	connect: async (database: string): Promise<Db> => {
 
-		mongoLogger.info({
-			transaction: 'MongoDB connect'
-		},`Connecting to ${database} for the first time!`, 'info');
+		let db: Db | undefined = MongoDbUtils.state.dbMap.get(database);
 
-		await mongoClient.connect();
+		if (db == null) {
+
+			mongoLogger.debug(`Connecting to ${database} for first time!`);
+
+			const mongoClient = await MongoClient.connect(mongoDBURIPartial + database, options);
 			
-		await mongoClient.db(database).command({ ping: 1 });
-		mongoLogger.info({
-			transaction: 'MongoDB connect'
-		}, 'Pinged your deployment. You successfully connected to MongoDB!', 'http');
+			MongoDbUtils.state.clientMap.set(database, mongoClient);
+			MongoDbUtils.state.dbMap.set(database, mongoClient.db(database));
+			db = mongoClient.db();
+		}
 
-	} finally {
-		await mongoClient.close();
+		return db;
 	}
 };
+
+export default MongoDbUtils;
