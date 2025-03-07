@@ -1,47 +1,56 @@
 // Next.js Custom Route Handler: https://nextjs.org/docs/app/building-your-application/routing/router-handlers
 import { createSchema, createYoga } from 'graphql-yoga';
-import { Resource, Tag } from '../../../lib/types/resources';
+import { Resource, Tag } from '@/lib/types/resources';
+import MongoDbUtils from '@/lib/MongoDBUtils';
+import { Db } from 'mongodb';
 // import schema from '../../schemas/schema.js';
+import createChildLogger from '@/lib/logger';
+
+const graphQLLogger = createChildLogger('GraphQL');
 
 interface NextContext {
 	params: Promise<Record<string, string>>
 }
 
- 
+graphQLLogger.debug('GraphQL Route Handler Loaded');
+graphQLLogger.debug(`Attempting to connect to MongoDB Database: ${process.env.MONGODB_DATABASE}`);
+
+const db: Db = await MongoDbUtils.connect(`${process.env.MONGODB_DATABASE}`);
+const resourcesColl = db.collection('resources');
+const tagsColl = db.collection('tags');
+
 const { handleRequest } = createYoga<NextContext>({
 	schema: createSchema({
 		typeDefs: /* GraphQL */ `
 			type Query {
-				resource: Resource,
-				tags: Tag[],
+				getResourcesByTag(tag: String!): [Resource!]!,
+				getTags: [Tag!]!
 			}
 
 			type Tag {
-				name: String,
+				name: String!,
 				description: String,
-				resources: Resource[]
+				resources: [Resource!]!
 			}
 
 			type Resource {
-				name: String,
+				name: String!,
 				description: String,
-				URL: String,
-				tags: Tag[]
+				URL: String!,
+				tags: [Tag!]!
 			}
 		`,
 		resolvers: {
 			Query: {
-				getResourcesByTag: (parent, args: { tag: string }, context, info): Resource[] => {
-					// mongoDB logic here
-					return [
-						{
-							name: 'Resource Name',
-							description: 'Resource Description',
-							URL: 'Resource URL',
-							tags: []
-						}
-					];
+
+				getResourcesByTag: async (parent, args: { tag: string }, context, info): Promise<Tag> => {
+					const { tag } = args;
+					const searchySearch = { name: tag };
+					const Tag = await tagsColl.findOne(searchySearch);
+
+					return Tag.resources;
 				},
+
 				getTags: (parent, args, context, info): Tag[] => {
 					// mongoDB logic here
 					return [
