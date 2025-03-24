@@ -1,4 +1,4 @@
-const typeDefs: any = /*GraphQL */ `
+const typeDefs = /*GraphQL */ `
 	type Query {
 		tag(name: String!): Tag!
 	}
