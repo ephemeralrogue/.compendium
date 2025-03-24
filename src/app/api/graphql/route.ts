@@ -18,15 +18,40 @@ graphQLLogger.debug('GraphQL Route Handler Loaded');
 graphQLLogger.debug(`Attempting to connect to MongoDB Database: ${process.env.MONGODB_DATABASE}`);
 
 const db: Db = await MongoDbUtils.connect(`${process.env.MONGODB_DATABASE}`);
-const resourcesColl = db.collection('resources');
+// const resourcesColl = db.collection('resources');
 const tagsColl = db.collection('tags');
 
 const { handleRequest } = createYoga<NextContext>({
 	schema: createSchema({
-		typeDefs: fs.readFileSync(
-			path.join(path.dirname(fileURLToPath(import.meta.url)),
-				'@/lib/graphql/schema.graphql'),
-			'utf-8'),
+		typeDefs: `
+			type Query {
+				tag(name: String!): Tag!
+			}
+
+			type Tag {
+				name: String!
+				description: String
+				resources: [Resource!]!
+			}
+
+			type Resource {
+				name: String!
+				description: String
+				URL: String!
+				tags: [Tag!]!
+			}
+
+			type TagMapper = {
+				tagName: String
+				tagDescription: String
+			}
+
+			type ResourceMapper = {
+				resName: String
+				resDescription: String
+				resURL: String
+			}
+		`,
 		resolvers: {
 			Query: {
 
@@ -43,23 +68,6 @@ const { handleRequest } = createYoga<NextContext>({
 						name: tag.name,
 						description: tag.description,
 						resources: tag.resources
-					};
-				},
-
-				resource: async (_, { name }): Promise<Resource> => {
-					const searchySearch = {name: name};
-					const resource = await resourcesColl.findOne(searchySearch);
-
-					if (!resource) {
-						throw new Error('Resource not found');
-					}
-
-					return {
-						_id: resource._id,
-						name: resource.name,
-						description: resource.description,
-						URL: resource.URL,
-						tags: resource.tags
 					};
 				}
 			},

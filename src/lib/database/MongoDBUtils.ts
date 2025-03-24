@@ -4,7 +4,7 @@ import {
 	MongoClientOptions,
 	ServerApiVersion
 } from 'mongodb';
-import createChildLogger from './logger/logger.js';
+import createChildLogger from '../logger/logger.js';
 
 const mongoLogger = createChildLogger('MongoDB');
 
