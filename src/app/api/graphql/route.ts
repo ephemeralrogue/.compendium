@@ -1,11 +1,7 @@
 // Next.js Custom Route Handler: https://nextjs.org/docs/app/building-your-application/routing/router-handlers
 import { createSchema, createYoga } from 'graphql-yoga';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import type { Resource, Tag } from '@/lib/types/resources';
-import MongoDbUtils from '@/lib/database/MongoDBUtils';
-import { Db } from 'mongodb';
+import typeDefs from '@/lib/graphql/typeDefs';
+import resolvers from '@/lib/graphql/resolvers';
 import createChildLogger from '@/lib/logger/logger';
 
 const graphQLLogger = createChildLogger('GraphQL');
@@ -17,84 +13,10 @@ interface NextContext {
 graphQLLogger.debug('GraphQL Route Handler Loaded');
 graphQLLogger.debug(`Attempting to connect to MongoDB Database: ${process.env.MONGODB_DATABASE}`);
 
-const db: Db = await MongoDbUtils.connect(`${process.env.MONGODB_DATABASE}`);
-// const resourcesColl = db.collection('resources');
-const tagsColl = db.collection('tags');
-
 const { handleRequest } = createYoga<NextContext>({
 	schema: createSchema({
-		typeDefs: `
-			type Query {
-				tag(name: String!): Tag!
-			}
-
-			type Tag {
-				name: String!
-				description: String
-				resources: [Resource!]!
-			}
-
-			type Resource {
-				name: String!
-				description: String
-				URL: String!
-				tags: [Tag!]!
-			}
-
-			type TagMapper = {
-				tagName: String
-				tagDescription: String
-			}
-
-			type ResourceMapper = {
-				resName: String
-				resDescription: String
-				resURL: String
-			}
-		`,
-		resolvers: {
-			Query: {
-
-				tag: async (_, { name }): Promise<Tag> => {
-					const searchySearch = {name: name};
-					const tag = await tagsColl.findOne(searchySearch);
-
-					if (!tag) {
-						throw new Error('Tag not found');
-					}
-
-					return {
-						_id: tag._id,
-						name: tag.name,
-						description: tag.description,
-						resources: tag.resources
-					};
-				}
-			},
-			/*
-			Tag: {
-				name: (parent: Tag, args, context, info) => parent.name,
-				description: (parent: Tag, args, context, info) => parent.description,
-				resources: async (parent: Tag, args, context, info): Promise<Resource[]> => parent.resources
-			},
-
-			Resource: {
-				name: (parent: Resource, args, context, info) => parent.name,
-				description: (parent: Resource, args, context, info) => parent.description,
-				URL: (parent: Resource, args, context, info) => parent.URL,
-				tags: async (parent: Resource, args, context, info): Promise<Tag[]> => {
-					const tagIds = parent.tags.map(tag => tag._id);
-					const queryTags = await tagsColl.find({ _id: { $in: tagIds } }).toArray();
-					return queryTags.map(tag => ({
-						_id: tag._id,
-						name: tag.name,
-						description: tag.description,
-						resources: tag.resources
-					}));
-				}
-			}
-			*/	
-		}
+		typeDefs,
+		resolvers,
 	}),
  
 	// While using Next.js file convention for routing, we need to configure Yoga to use the correct endpoint
