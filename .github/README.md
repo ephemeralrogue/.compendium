@@ -1,111 +1,129 @@
-<h1 align="center">The Design Compendium</h1>
-
-<p align="center">
+<div align="center">
     <br>
     <img
-        src="./assets/design-compendium-emblem.png"
-        alt="design-compendium-emblem"
-        width="120px"
+        src="./assets/design-compendium-emblem.png" 
+        alt="the lvnacy emblem, a gray circle with a large black 'V' superimposed."
+        width="256px"
     />
     <br>
-    <br>
-    <i>A repository of resources of all types to improve
+    <h1>.studio</h1>
+    <i>Access a repository of resources of all types to improve
         <br> the visual representation of your projects.
     </i>
     <br>
-</p>
-
-<p align="center">
-    <a href="https://blog.ephemeralrogue.xyz/the-design-compendium">
-        Project Writeup,
-    </a> by
-    <a href="https:////github.com/ephemeralrogue">
-        ephemeralrogue
-    </a>
-    •
-    <a href="https://bsky.app/profile/lvnacy.xyz">
-        Bluesky
-    </a>
-    <br>
-</p>
-
-<a id="overview"></a>
-<h2 align="center">Overview</h2>
-
-There are innumerable design resources out there, and almost as many 
-repositories ennumerating them. The Design Compendium will take the classic 
-README-style resource list and provide a frontend for the quick perusal of 
-resources by category.
-
-This project is currently designed to be forked and utilized on a personal 
-basis, as deployment of the official frontend will not occur until funding 
-makes deployment plausible. you can read about it 
-[here](https://blog.ephemeralrogue.xyz/the-design-compendium).
-
-This is being produced and maintained by 
-[ephemeralrogue](https://github.com/ephemeralrogue) 
-for LVNACY. Any questions regarding this repository and any contributions 
-should be directed there.
-[ephemeralrogue's Discord Server](https://discord.gg/nh7mqGEfbw)
-
-<a id="contents"></a>
-<h2 align="center">Contents</h2>
-
-- [Overview](#overview)
-- [The Goal](#goal)
-- [The Stack](#stack)
-- [TODO](#todo)
-- [Contributing](#contributing)
-
-<a id="goal"></a>
-<h2 align="center">The Goal</h2>
-
-A Single Page Application (SPA) with client-side rendering of two components:
-1. tag cloud where each tag is a link that will render the content
-2. component displaying the tagged resources
-
-[back to Contents](#contents)
-
-<a id="stack"></a>
-<h2 align="center">The Stack</h2>
-Here is the full stack concept of the project:
-<div align="center">
-    <img
-        src="./assets/design-repo-concept.JPG"
-        alt="visual design compendium concept"
-        width="500px"
-    />
 </div>
 
-[back to Contents](#contents)
+<div align="center">
+    <a href="https://blog.ephemeralrogue.xyz/the-design-compendium">
+        Project Writeup
+    </a>
+    •
+    <a href="https://bsky.app/profile/lvnacy.xyz/">L V N A C Y Bluesky</a>
+    •
+    <a href="https://discord.gg/nh7mqGEfbw">L V N A C Y Discord</a>
+    •
+    <br>
+</div>
+<br>
+<br>
 
-<a id="todo"></a>
-<h2 align="center">TODO</h2>
+# Contents
+- [High Level](#high-level)
+- [Project Overview](#project-overview)
+- [.studio](#studio)
+- [Why?](#why)
+- [TODO](#todo)
+- [Contributing to the Project](#contributing)
+    - [Bot Stack](#bot-stack)
+    - [Getting Started](#getting-started)
+<br>
+<br>
+<div align='center'>
+    <img
+        src='./assets/design-compendium-github.jpg'
+        alt='The Design Compendium header. Two pencils are lined up to one side, 
+            with the words "The Design Compendium" in the center, all over a 
+            yellow background'
+    />
+</div>
+<br>
 
-- add MongoDB connection
-- build GraphQL resolvers to retrieve data
+# high level
+The Design Compendium is a resource for graphic designers and developers. When completed, this will present a simple frontend where users can select a tag and be served resources centered around that tag in the realms of design and code.
+
+![A sketch with a cloud of emblems for the different technologies in use, including node.js, Next.js, GraphQL, and MongoDB, surrounded by simple notes explaining how they'll work together.](./assets/design-compendium-tech-stack.PNG "Web Stack Concept")
+
+[Back to Contents](#contents)
+
+# project overview
+The Design Compendium consists of three parts:
+
+1. **.compendium**: the database containing the resource documents
+2. **.accumulator**: the method by which CRUD operations are run on **.compendium**
+3. **.studio**: the frontend to display tags and resources
+
+![sketch of project design. Three circles are super imposed over a rectangle. Inside the rectangle is the title of the project. The bottom circle holds a sketch of a cylinder with the MongoDB logo; above it is the graphQL logo. The word '.compendium' is written along the outside of the circle. The circle to the upper right has the Discord logo inside it with the word '.accumulator' written along the outside. Arrows connect the cicles to describe the relationship between the two. The third circle sits to upper left of the first and contains the Next.js logo with the word '.studio' circumscribed along the outside. Arrows connect this circle with the first to describe their relationship.](./assets/design-compendium-workflow-2.png "Design Compendium workflow diagram")
+
+The GraphQL API is built into the Next.js app, using the routing system. Right 
+now, the front end and API is intertwined. Part of the roadmap includes 
+decoupling the two, so any database may be used, and a REST API may be 
+substituted if preferred.
+
+For details on the frontend and API, see [**.studio**][studio].
+
+[Back to Contents](#contents)
+
+# .studio
+This is **.studio**, the frontend gallery for The Design Compendium. It will 
+be designed to interface with **.compendium** through a GraphQL endpoint 
+set to read-only: `GET` is its sole purpose. CRUD operations will be handled 
+via [**.accumulator**](accumulator); see that repository for more details.
+
+**.studio** is currently in development and not yet active. The domain is up 
+and running, though all that is displayed at the moment is Next.js 
+boilerplate. The GraphQL endpoint is active though currently not connected to 
+**.compendium**. `typeDefs` are written for the schema; the resolvers still 
+need to be written.
+
+> [!IMPORTANT]
+> Major blocker atm is having data to query. Once **.accumulator** is up and 
+> running, test resources will be inserted and development may continue here.
+
+[Back to Contents](#contents)
+
+# why?
+Why the fuck am I doing this? I needed something to motivate me to actually 
+learn frontend development. Also, I got tired of running through lists of 
+resources and finding them poorly vetted. Some of the READMEs out there, while 
+fairly comprehensive, are incredibly outdated.
+
+Why the fuck is this thing designed this way? I settled on this project design 
+as a way to play with and understand relationships between different parts. 
+This isn't quite a microservices-oriented system, but it also isn't a 
+self-composed project. In addition to the parts that move data around are the 
+layers of interaction above the app, those conversations I hope will take 
+place around resource submissions and discussions.
+
+[Back to Contents](#contents)
+
+# TODO
+
+- ~~add MongoDB connection~~
+- write GraphQL resolvers to retrieve data
 - write algorithm to display resources by tag
 - make the frontend pretty
 
 [back to Contents](#contents)
 
-<a id="contributing"></a>
-<h2 align="center">Contributing</h2>
-with regard to the general development of what currently exists here:
-
+# Contributing
+With regard to the general development of what currently exists here:
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -130,3 +148,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 [back to Contents](#contents)
+
+<!-- Links -->
+[accumulator]: https://github.com/ephemeralrogue/.accumulator
