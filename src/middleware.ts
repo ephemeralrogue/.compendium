@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import createChildLogger from './lib/logger';
+import createChildLogger from './lib/logger/logger';
 
 const routesLogger = createChildLogger('routes', {
 	transaction: 'api'
